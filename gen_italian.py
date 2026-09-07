@@ -1182,18 +1182,50 @@ function buildFull(v){
     imp = b.imp;
   }
 
+  // 否定命令式 Imperativo negativo
+  // 非自反：tu = non + 原形；noi/voi = non + 现在时；Lei/Loro = non + 虚拟式现在时
+  // 自反：tu = non ti + 原形（b.inf 已是去 si 基数）；noi/voi 复用带代词的现在时；Lei/Loro = non si + 虚拟式
+  var sp2 = b.subj_pres[2], sp5 = b.subj_pres[5];
+  var simp = simple(b.pres);          // 自反时已带 mi/ti/ci/vi/si 代词
+  var imp_neg;
+  if(refl){
+    imp_neg = ['',
+      'non ti '+b.inf,      // non ti lavare
+      'non si '+sp2,        // non si lavi
+      'non '+simp[3],       // non ci laviamo
+      'non '+simp[4],       // non vi lavate
+      'non si '+sp5         // non si lavino
+    ];
+  } else {
+    imp_neg = ['',
+      'non '+b.inf,         // non parlare
+      'non '+sp2,           // non parli
+      'non '+simp[3],       // non parliamo
+      'non '+simp[4],       // non parlate
+      'non '+sp5            // non parlino
+    ];
+  }
+
   var inf = refl ? b.inf.slice(0,-1)+'si' : b.inf;   // lavare -> lavarsi（去 e 换 si）
   var inf_comp = (refl ? 'essersi' : A.inf) + ' ' + pp;
   var ger = refl ? b.ger+'si' : b.ger;                // lavando -> lavandosi（直接加 si）
   var ger_comp = (refl ? 'essendosi' : A.ger) + ' ' + pp;
+
+  // 过去分词性数一致（m.sg / f.sg / m.pl / f.pl）：意语过去分词阳单恒以 -o 结尾
+  var ppAgree;
+  if(pp.charAt(pp.length-1)==='o'){
+    ppAgree=[pp, pp.slice(0,-1)+'a', pp.slice(0,-1)+'i', pp.slice(0,-1)+'e'];
+  } else {
+    ppAgree=[pp,pp,pp,pp];
+  }
 
   return {
     ind_pres:ind_pres, ind_perf:ind_perf, ind_imperf:ind_imperf, ind_plus:ind_plus,
     ind_remoto:ind_remoto, ind_remoto_ant:ind_remoto_ant, ind_fut:ind_fut, ind_fut_perf:ind_fut_perf,
     subj_pres:subj_pres, subj_perf:subj_perf, subj_imperf:subj_imperf, subj_plus:subj_plus,
     cond_pres:ind_cond, cond_perf:cond_perf,
-    imp:imp,
-    inf:inf, inf_comp:inf_comp, ger:ger, ger_comp:ger_comp, ppr:b.ppr, pp:pp,
+    imp:imp, imp_neg:imp_neg,
+    inf:inf, inf_comp:inf_comp, ger:ger, ger_comp:ger_comp, ppr:b.ppr, pp:pp, pp4:ppAgree,
     aux:aux, refl:refl
   };
 }

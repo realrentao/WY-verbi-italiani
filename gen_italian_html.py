@@ -164,6 +164,15 @@ chk('lavarsi','ind_pres',0,'mi lavo'); chk('lavarsi','ind_pres',1,'ti lavi'); ch
 chk('alzarsi','ind_pres',0,'mi alzo'); chk('alzarsi','pp',0,'alzato'); chkRefl('alzarsi',true);
 chk('vestirsi','ind_pres',0,'mi vesto'); chk('vestirsi','imp',1,'vestiti'); chkRefl('vestirsi',true);
 chk('sedersi','ind_pres',0,'mi siedo'); chk('sedersi','imp',1,'siediti'); chkRefl('sedersi',true);
+// imperativo negativo
+chk('parlare','imp_neg',1,'non parlare'); chk('parlare','imp_neg',2,'non parli'); chk('parlare','imp_neg',3,'non parliamo'); chk('parlare','imp_neg',4,'non parlate'); chk('parlare','imp_neg',5,'non parlino');
+chk('finire','imp_neg',1,'non finire'); chk('finire','imp_neg',4,'non finite');
+chk('lavarsi','imp_neg',1,'non ti lavare'); chk('lavarsi','imp_neg',2,'non si lavi'); chk('lavarsi','imp_neg',3,'non ci laviamo'); chk('lavarsi','imp_neg',4,'non vi lavate'); chk('lavarsi','imp_neg',5,'non si lavino');
+// participio passato 性数一致
+chk('parlare','pp4',0,'parlato'); chk('parlare','pp4',1,'parlata'); chk('parlare','pp4',2,'parlati'); chk('parlare','pp4',3,'parlate');
+chk('morire','pp4',0,'morto'); chk('morire','pp4',1,'morta'); chk('morire','pp4',2,'morti'); chk('morire','pp4',3,'morte');
+chk('trarre','pp4',0,'tratto'); chk('trarre','pp4',1,'tratta'); chk('trarre','pp4',2,'tratti'); chk('trarre','pp4',3,'tratte');
+chk('condurre','pp4',0,'condotto'); chk('condurre','pp4',3,'condotte');
 
 console.log('TOTAL VERBOS:', VERBS.length);
 console.log('ASSERTIONS DONE, fails='+fails);
@@ -256,7 +265,8 @@ UI_JS = r"""
       subj_plus:['虚拟式过去完成时','Congiuntivo trapassato'],
       cond_pres:['条件式现在时','Condizionale presente'],
       cond_perf:['条件式过去时','Condizionale passato'],
-      imp:['命令式','Imperativo']
+      imp:['命令式肯定','Imperativo (affermativo)'],
+      imp_neg:['命令式否定','Imperativo (negativo)']
     };
     return m[key]||[key,key];
   }
@@ -287,14 +297,14 @@ UI_JS = r"""
     html+=moodBlock('#009246','陈述式 Indicativo',['ind_pres','ind_perf','ind_imperf','ind_plus','ind_remoto','ind_remoto_ant','ind_fut','ind_fut_perf']);
     html+=moodBlock('#1E5AA8','虚拟式 Congiuntivo',['subj_pres','subj_perf','subj_imperf','subj_plus']);
     html+=moodBlock('#CE2B37','条件式 Condizionale',['cond_pres','cond_perf']);
-    html+=moodBlock('#B8860B','命令式 Imperativo',['imp']);
+    html+=moodBlock('#B8860B','命令式 Imperativo',['imp','imp_neg']);
     html+='<section class="mood imp"><h3 class="mhead">非人称形式 Forme impersonali</h3><div class="impgrid">'+
       '<div class="impcell"><span class="ilab">原形 Infinito</span><b>'+c.inf+'</b></div>'+
       '<div class="impcell"><span class="ilab">复合原形 Infinito composto</span><b>'+c.inf_comp+'</b></div>'+
       '<div class="impcell"><span class="ilab">副动词 Gerundio</span><b>'+c.ger+'</b></div>'+
       '<div class="impcell"><span class="ilab">复合副动词 Gerundio composto</span><b>'+c.ger_comp+'</b></div>'+
       '<div class="impcell"><span class="ilab">现在分词 Participio presente</span><b>'+c.ppr+'</b></div>'+
-      '<div class="impcell"><span class="ilab">过去分词 Participio passato</span><b>'+c.pp+'</b></div>'+
+      '<div class="impcell"><span class="ilab">过去分词 Participio passato（阳单/阴单/阳复/阴复）</span><b>'+c.pp4.join(' · ')+'</b></div>'+
       '</div></section>';
     detailEl.innerHTML=html;
     (function alignLabels(){
